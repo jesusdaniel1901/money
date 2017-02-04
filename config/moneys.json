@@ -1,0 +1,19 @@
+{
+  "currencies": [
+    {
+      "name": "Dollar",
+      "abbrev": "USD",
+      "symbol": "$"
+    },
+    {
+      "name": "Euro",
+      "abbrev": "EUR",
+      "symbol": "€"
+    },
+    {
+      "name": "Pounds",
+      "abbrev": "GBP",
+      "symbol": "£"
+    }
+  ]
+}

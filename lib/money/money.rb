@@ -1,23 +1,64 @@
+require 'money/currency'
 class Money
-  attr_accessor :amount
+  attr_accessor :amount,:currency
 
-  def initialize(amount)
+  extend Enumerable
+
+  def initialize(amount,currency_string)
     @amount = amount
+    @currency = Currency.new(currency_string)
   end
-
-  # [:+, :-].each do |op|
-  #   define_method(op) do |other|
-  #     unless other.is_a?(Money)
-  #       return self if other.zero?
-  #       raise TypeError
-  #     end
-  #     other = other.exchange_to(currency)
-  #     self.class.new(fractional.public_send(op, other.fractional), currency)
-  #   end
-  # end
 
   def +(other_money)
-    @amount  +=  other_money.amount
+    if other_money.is_a?(Money)
+      @amount  +=  other_money.amount
+    elsif other_money.is_a?(Numeric)
+      @amount  +=  other_money
+    else
+      raise TypeError
+    end
+    return self
   end
+
+  def -(other_money)
+    if other_money.is_a?(Money)
+      @amount  -=  other_money.amount
+    elsif other_money.is_a?(Numeric)
+      @amount -= other_money
+    else
+      raise TypeError
+    end
+    return self
+  end
+
+  def *(other_money)
+    if other_money.is_a?(Money)
+      @amount  *=  other_money.amount
+    elsif other_money.is_a?(Numeric)
+      @amount -= other_money
+    else
+      raise TypeError
+    end
+    return self
+  end
+
+  def /(other_money)
+    if other_money.is_a?(Money)
+      @amount  /=  other_money.amount if other_money.amount != 0
+    elsif other_money.is_a?(Numeric)
+      @amount  /=  other_money if other_money != 0
+    else
+      raise TypeError
+    end
+    return self
+  end
+
+  def currency
+    @currency
+  end
+
+
+
+
 
 end
