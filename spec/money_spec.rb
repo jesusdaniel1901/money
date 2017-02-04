@@ -112,15 +112,22 @@ describe Money do
     end
   end
 
-  # describe 'conversion_rates' do
-  #   it 'set the new EUR rates' do
-  #     Money.conversion_rates('USD',{
-  #       "USD": 1,
-  #       "GBP": 20,
-  #       "EUR":10
-  #     })
-  #   end
-  # end
+  describe 'conversion_rates' do
+    it 'set the new EUR rates' do
+      Money.conversion_rates('USD',{
+        "EUR":10,
+        "GBP": 20
+      })
+      currency_exchange_file = File.read('config/currencies_exchange.json')
+      currency_exchange_json = JSON.parse currency_exchange_file
+      expect(currency_exchange_json["USD"]["GBP"]).to eq 20
+      expect(currency_exchange_json["USD"]["EUR"]).to eq 10
+      Money.conversion_rates('USD',{
+        "EUR":0.92,
+        "GBP": 0.8
+      })
+    end
+  end
 
 
 end
