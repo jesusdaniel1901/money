@@ -74,6 +74,18 @@ class Money
     return self
   end
 
+  def self.conversion_rates(base_currency,options={})
+    file = File.read('config/currencies_exchange.json')
+    hash = JSON.parse file
+    hash[base_currency]= options
+    hash.to_json
+    JSON.pretty_generate hash
+
+    File.open("config/currencies_exchange.json","w") do |f|
+      f.write(JSON.pretty_generate(hash))
+    end
+  end
+
 
 
 

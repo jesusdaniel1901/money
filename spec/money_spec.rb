@@ -80,5 +80,15 @@ describe Money do
 
   end
 
+  describe 'conversion_rates' do
+    it 'set the new EUR rates' do
+      Money.conversion_rates('USD',{
+        "USD": 1,
+        "GBP": 20,
+        "EUR":10
+      })
+    end
+  end
+
 
 end
