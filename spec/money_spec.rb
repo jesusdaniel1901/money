@@ -80,15 +80,39 @@ describe Money do
 
   end
 
-  describe 'conversion_rates' do
-    it 'set the new EUR rates' do
-      Money.conversion_rates('USD',{
-        "USD": 1,
-        "GBP": 20,
-        "EUR":10
-      })
+  describe '#Comparisons' do
+    let(:money_1) { Money.new(20,'USD') }
+    let(:money_2) { Money.new(30,'EUR') }
+
+    it 'compare USD with USD' do
+      expect(money_1 == Money.new(20,'USD')).to eq true
+    end
+
+    it 'compare EUR with USD' do
+      expect(money_1 < money_2).to eq true
+      expect(money_2 > money_1 ).to eq true
+    end
+
+    it 'compare EUR with EUR' do
+      expect(money_2 < Money.new(50,'EUR')).to eq true
+      expect(money_2 > Money.new(10,'EUR') ).to eq true
+    end
+
+    it 'compare USD with GBP' do
+      expect(money_1 < Money.new(20,'GBP')).to eq true
+      expect(Money.new(20,'GBP') > Money.new(20,'EUR') ).to eq true
     end
   end
+
+  # describe 'conversion_rates' do
+  #   it 'set the new EUR rates' do
+  #     Money.conversion_rates('USD',{
+  #       "USD": 1,
+  #       "GBP": 20,
+  #       "EUR":10
+  #     })
+  #   end
+  # end
 
 
 end

@@ -1,19 +1,37 @@
+//{
+//  "currencies": [
+//    {
+//      "name": "Dollar",
+//      "abbrev": "USD",
+//      "symbol": "$"
+//    },
+//    {
+//      "name": "Euro",
+//      "abbrev": "EUR",
+//      "symbol": "€"
+//    },
+//    {
+//      "name": "Pounds",
+//      "abbrev": "GBP",
+//      "symbol": "£"
+//    }
+//  ]
+//}
+
 {
-  "currencies": [
-    {
-      "name": "Dollar",
-      "abbrev": "USD",
-      "symbol": "$"
-    },
-    {
-      "name": "Euro",
-      "abbrev": "EUR",
-      "symbol": "€"
-    },
-    {
-      "name": "Pounds",
-      "abbrev": "GBP",
-      "symbol": "£"
-    }
-  ]
+  "USD": {
+    "name": "Dollar",
+    "abbrev": "USD",
+    "symbol": "$"
+  },
+  "EUR": {
+    "name": "Euro",
+    "abbrev": "EUR",
+    "symbol": "€"
+  },
+  "GBP": {
+    "name": "Pounds",
+    "abbrev": "GBP",
+    "symbol": "£"
+  }
 }

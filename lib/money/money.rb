@@ -57,6 +57,33 @@ class Money
     return self
   end
 
+  def ==(other_money)
+    if other_money.is_a?(Money)
+      second_operand = other_money.convert_to(currency).amount
+      @amount == second_operand ? true : false
+    else
+      raise TypeError
+    end
+  end
+
+  def >(other_money)
+    if other_money.money?
+      second_operand = other_money.convert_to(currency).amount
+      @amount > second_operand ? true: false
+    else
+      raise TypeError
+    end
+  end
+
+  def <(other_money)
+    if other_money.money?
+      second_operand = other_money.convert_to(currency).amount
+      @amount < second_operand ? true: false
+    else
+      raise TypeError
+    end
+  end
+
   def currency
     @currency.abbrev
   end
@@ -66,12 +93,16 @@ class Money
   end
 
   def convert_to(currency_string)
-    file = File.read('config/currencies_exchange.json')
-    data_hash = JSON.parse(file)
-    currency_rate =  data_hash[@currency.abbrev.to_s][currency_string.to_s]
-    @amount = (@amount *currency_rate).round(2)
-    @currency = Currency.new(currency_string)
-    return self
+    if @currency.abbrev.to_s == currency_string.to_s
+      return self
+    else
+      file = File.read('config/currencies_exchange.json')
+      data_hash = JSON.parse(file)
+      currency_rate =  data_hash[@currency.abbrev.to_s][currency_string.to_s]
+      @amount = (@amount *currency_rate).round(2)
+      @currency = Currency.new(currency_string)
+      return self
+    end
   end
 
   def self.conversion_rates(base_currency,options={})
@@ -84,6 +115,12 @@ class Money
     File.open("config/currencies_exchange.json","w") do |f|
       f.write(JSON.pretty_generate(hash))
     end
+  end
+
+
+
+  def money?
+    is_a?(Money)
   end
 
 
