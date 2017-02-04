@@ -12,49 +12,49 @@ class Money
   def +(other_money)
     if other_money.is_a?(Money)
       second_operand = other_money.convert_to(currency).amount
-      @amount  +=  second_operand
+      new_result  = @amount + second_operand
     elsif other_money.is_a?(Numeric)
-      @amount  +=  other_money
+      new_result  = @amount + other_money
     else
       raise TypeError
     end
-    return self
+    return self.class.new(new_result,currency)
   end
 
   def -(other_money)
     if other_money.is_a?(Money)
       second_operand = other_money.convert_to(currency).amount
-      @amount  -= second_operand
+      new_result  = @amount - second_operand
     elsif other_money.is_a?(Numeric)
-      @amount -= other_money
+      new_result = @amount - other_money
     else
       raise TypeError
     end
-    return self
+    return self.class.new(new_result,currency)
   end
 
   def *(other_money)
     if other_money.is_a?(Money)
       second_operand = other_money.convert_to(currency).amount
-      @amount  = (@amount* second_operand).round(2)
+      new_result  = (@amount* second_operand).round(2)
     elsif other_money.is_a?(Numeric)
-      @amount -= other_money
+      new_result = (@amount * other_money).round(2)
     else
       raise TypeError
     end
-    return self
+    return self.class.new(new_result,currency)
   end
 
   def /(other_money)
     if other_money.is_a?(Money)
       second_operand = other_money.convert_to(currency).amount
-      @amount  =  (@amount/second_operand).round(2) if second_operand != 0
+      new_result  =  (@amount/second_operand.to_f).round(2) if second_operand != 0
     elsif other_money.is_a?(Numeric)
-      @amount  = (@amount/other_money).round(2) if other_money != 0
+      new_result  = (@amount/other_money).round(2) if other_money != 0
     else
       raise TypeError
     end
-    return self
+    return self.class.new(new_result,currency)
   end
 
   def ==(other_money)

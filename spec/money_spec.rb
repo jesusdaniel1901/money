@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Money do
 
-  describe '#operands' do
+  describe '#Arithmetics with USD' do
     let(:money_1) { Money.new(3,'USD') }
     let(:money_2) { Money.new(2,'USD') }
 
@@ -10,29 +10,33 @@ describe Money do
       new_money = money_1 + money_2
       expect(new_money.amount).to eq 5
       expect(new_money.currency).to eq 'USD'
+      expect(money_1 + money_2).to eq Money.new(5,'USD')
     end
 
     it 'substration moneys' do
       new_money = money_1 - money_2
       expect(new_money.amount).to eq 1
       expect(new_money.currency).to eq 'USD'
+      expect(money_1 - money_2).to eq Money.new(1,'USD')
     end
 
     it 'multiply two moneys' do
       new_money = money_1 * money_2
       expect(new_money.amount).to eq 6
       expect(new_money.currency).to eq 'USD'
+      expect(money_1 * money_2).to eq Money.new(6,'USD')
     end
 
     it 'divide two moneys' do
-      new_money = money_1 * money_2
-      expect(new_money.amount).to eq 6
+      new_money = money_1 / money_2
+      expect(new_money.amount).to eq 1.5
       expect(new_money.currency).to eq 'USD'
+      expect(money_1 / money_2).to eq Money.new(1.5,'USD')
     end
 
   end
 
-  describe '#operands_with_two_money' do
+  describe '#Arithmetics with USD and EUR' do
     let(:money_1) { Money.new(3,'EUR') }
     let(:money_2) { Money.new(2,'USD') }
 
@@ -40,33 +44,37 @@ describe Money do
       new_money = money_1 + money_2
       expect(new_money.amount).to eq 4.84
       expect(new_money.currency).to eq 'EUR'
+      expect(money_1 + money_2).to eq Money.new(4.84,'EUR')
     end
 
     it 'substration moneys' do
       new_money = money_1 - money_2
       expect(new_money.amount).to eq 1.16
       expect(new_money.currency).to eq 'EUR'
+      expect(money_1 - money_2).to eq Money.new(1.16,'EUR')
     end
 
     it 'multiply two moneys' do
       new_money = money_1 * money_2
       expect(new_money.amount).to eq 5.52
       expect(new_money.currency).to eq 'EUR'
+      expect(money_1 * money_2).to eq Money.new(5.52,'EUR')
     end
 
     it 'divide two moneys' do
       new_money = money_1 / money_2
       expect(new_money.amount).to eq 1.63
       expect(new_money.currency).to eq 'EUR'
+      expect(money_1 / money_2).to eq Money.new(1.63,'EUR')
     end
 
   end
 
-  describe '#convert' do
+  describe '#convert_to' do
 
     let(:money_1) { Money.new(3,'USD') }
 
-    it 'convert  to euro' do
+    it 'convert USD to EUR' do
       money_1.convert_to('EUR')
       expect(money_1.currency).to eq 'EUR'
       expect(money_1.amount).to eq 2.76
