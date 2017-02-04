@@ -11,7 +11,8 @@ class Money
 
   def +(other_money)
     if other_money.is_a?(Money)
-      @amount  +=  other_money.amount
+      second_operand = other_money.convert_to(currency).amount
+      @amount  +=  second_operand
     elsif other_money.is_a?(Numeric)
       @amount  +=  other_money
     else
@@ -22,7 +23,8 @@ class Money
 
   def -(other_money)
     if other_money.is_a?(Money)
-      @amount  -=  other_money.amount
+      second_operand = other_money.convert_to(currency).amount
+      @amount  -= second_operand
     elsif other_money.is_a?(Numeric)
       @amount -= other_money
     else
@@ -33,7 +35,8 @@ class Money
 
   def *(other_money)
     if other_money.is_a?(Money)
-      @amount  *=  other_money.amount
+      second_operand = other_money.convert_to(currency).amount
+      @amount  = (@amount* second_operand).round(2)
     elsif other_money.is_a?(Numeric)
       @amount -= other_money
     else
@@ -44,9 +47,10 @@ class Money
 
   def /(other_money)
     if other_money.is_a?(Money)
-      @amount  /=  other_money.amount if other_money.amount != 0
+      second_operand = other_money.convert_to(currency).amount
+      @amount  =  (@amount/second_operand).round(2) if second_operand != 0
     elsif other_money.is_a?(Numeric)
-      @amount  /=  other_money if other_money != 0
+      @amount  = (@amount/other_money).round(2) if other_money != 0
     else
       raise TypeError
     end
@@ -54,7 +58,20 @@ class Money
   end
 
   def currency
-    @currency
+    @currency.abbrev
+  end
+
+  def inspect
+    "#{amount} #{currency}"
+  end
+
+  def convert_to(currency_string)
+    file = File.read('config/currencies_exchange.json')
+    data_hash = JSON.parse(file)
+    currency_rate =  data_hash[@currency.abbrev.to_s][currency_string.to_s]
+    @amount = (@amount *currency_rate).round(2)
+    @currency = Currency.new(currency_string)
+    return self
   end
 
 
