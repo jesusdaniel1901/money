@@ -28,11 +28,25 @@ describe Money do
       expect(money_1 + money_2).to eq Money.new(5,'USD')
     end
 
-    it 'substration moneys' do
+    it 'sum two moneys and second operand is a number' do
+      new_money = money_1 + 3
+      expect(new_money.amount).to eq 6
+      expect(new_money.currency).to eq 'USD'
+      expect(money_1 + 3).to eq Money.new(6,'USD')
+    end
+
+    it 'subtracts moneys' do
       new_money = money_1 - money_2
       expect(new_money.amount).to eq 1
       expect(new_money.currency).to eq 'USD'
       expect(money_1 - money_2).to eq Money.new(1,'USD')
+    end
+
+    it 'subtract two moneys and second operand is a number' do
+      new_money = money_1 - 2
+      expect(new_money.amount).to eq 1
+      expect(new_money.currency).to eq 'USD'
+      expect(money_1 - 2).to eq Money.new(1,'USD')
     end
 
     it 'multiply two moneys' do
@@ -42,11 +56,25 @@ describe Money do
       expect(money_1 * money_2).to eq Money.new(6,'USD')
     end
 
-    it 'divide two moneys' do
+    it 'multiplies two moneys and second operand is a number' do
+      new_money = money_1 * 3
+      expect(new_money.amount).to eq 9.0
+      expect(new_money.currency).to eq 'USD'
+      expect(money_1 * 3).to eq Money.new(9.0,'USD')
+    end
+
+    it 'divides two moneys' do
       new_money = money_1 / money_2
       expect(new_money.amount).to eq 1.5
       expect(new_money.currency).to eq 'USD'
       expect(money_1 / money_2).to eq Money.new(1.5,'USD')
+    end
+
+    it 'divides two moneys and second operand is a number' do
+      new_money = money_1 / 3
+      expect(new_money.amount).to eq 1.0
+      expect(new_money.currency).to eq 'USD'
+      expect(money_1 / 3).to eq Money.new(1.0,'USD')
     end
 
   end
