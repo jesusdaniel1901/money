@@ -29,9 +29,9 @@ Money.conversion_rates('EUR', {
 })
 # Instantiate money objects
 thirty_eur = Money.new(30,'EUR')
-thirty_eur.amount #=> 30
+thirty_eur.amount #=> 30.00
 thirty_eur.currency #=> "EUR"
-thirty_eur.inspect #=> "30 EUR"
+thirty_eur.inspect #=> "30.0 EUR"
 ```
 
 ```
@@ -42,17 +42,21 @@ twenty_eur.convert_to('USD') # => 21.6 USD
 ```
 # Arithmetics
 twenty_usd = Money.new(20, 'USD')
-thirty_eur + twenty_usd # => 48.4 EUR
-thirty_eur - twenty_usd # => 11.6 EUR
-thirty_eur / twenty_usd # => 1.63 EUR
-thirty_eur * twenty_usd # => 552.0 EUR
+thirty_eur = Money.new(30, 'EUR')
+thirty_eur + twenty_usd # => 48.6 EUR
+thirty_eur - twenty_usd # => 11.4 EUR
+thirty_eur / twenty_usd # => 1.61 EUR
+thirty_eur * twenty_usd # => 558.0 EUR
 
 thirty_usd * 3 #=> 90.0 USD
-thirty_usd * / 3 #=> 10.0 USD
+thirty_usd / 3 #=> 10.0 USD
 ```
 
 ```
 # Comparisons
+twenty_usd = Money.new(20, 'USD')
+thirty_eur = Money.new(30, 'EUR')
+
 thirty_eur == Money.new(30, 'EUR') # => true
 thirty_eur == Money.new(20, 'EUR') # => false 
 

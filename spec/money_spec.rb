@@ -6,7 +6,7 @@ describe Money do
     let(:thirty_eur) { Money.new(30,'EUR') }
 
     it 'test the instance methods' do
-      expect(thirty_eur.amount).to eq 30
+      expect(thirty_eur.amount).to eq 30.00
       expect(thirty_eur.currency).to eq 'EUR'
       expect(thirty_eur.inspect).to eq '30.0 EUR'
     end
@@ -85,30 +85,30 @@ describe Money do
 
     it 'sum two moneys' do
       new_money = thirty_eur + twenty_usd
-      expect(new_money.amount).to eq 48.4
+      expect(new_money.amount).to eq 48.6
       expect(new_money.currency).to eq 'EUR'
-      expect(thirty_eur + twenty_usd).to eq Money.new(48.4,'EUR')
+      expect(thirty_eur + twenty_usd).to eq Money.new(48.6,'EUR')
     end
 
     it 'substration moneys' do
       new_money = thirty_eur - twenty_usd
-      expect(new_money.amount).to eq 11.6
+      expect(new_money.amount).to eq 11.4
       expect(new_money.currency).to eq 'EUR'
-      expect(thirty_eur - twenty_usd).to eq Money.new(11.6,'EUR')
+      expect(thirty_eur - twenty_usd).to eq Money.new(11.4,'EUR')
     end
 
     it 'multiply two moneys' do
       new_money = thirty_eur * twenty_usd
-      expect(new_money.amount).to eq 552.0
+      expect(new_money.amount).to eq 558.0
       expect(new_money.currency).to eq 'EUR'
-      expect(thirty_eur * twenty_usd).to eq Money.new(552.0,'EUR')
+      expect(thirty_eur * twenty_usd).to eq Money.new(558.0,'EUR')
     end
 
     it 'divide two moneys' do
       new_money = thirty_eur / twenty_usd
-      expect(new_money.amount).to eq 1.63
+      expect(new_money.amount).to eq 1.61
       expect(new_money.currency).to eq 'EUR'
-      expect(thirty_eur / twenty_usd).to eq Money.new(1.63,'EUR')
+      expect(thirty_eur / twenty_usd).to eq Money.new(1.61,'EUR')
     end
 
   end
@@ -121,8 +121,8 @@ describe Money do
     it 'convert USD to EUR' do
       thirty_usd.convert_to('EUR')
       expect(thirty_usd.currency).to eq 'EUR'
-      expect(thirty_usd.amount).to eq 27.6
-      expect(thirty_usd).to eq Money.new(27.6,'EUR')
+      expect(thirty_usd.amount).to eq 27.9
+      expect(thirty_usd).to eq Money.new(27.9,'EUR')
     end
 
     it 'convert USD to GBP' do
@@ -184,7 +184,7 @@ describe Money do
       expect(currency_exchange_json["USD"]["GBP"]).to eq 20
       expect(currency_exchange_json["USD"]["EUR"]).to eq 10
       Money.conversion_rates('USD',{
-        "EUR":0.92,
+        "EUR":0.93,
         "GBP": 0.8
       })
     end
