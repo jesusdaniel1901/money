@@ -9,7 +9,7 @@ class Currency
       @symbol = currency["symbol"]
       @abbrev = currency["abbrev"]
     else
-      raise 'We do not support the currency'
+      raise TypeError,"We do not support the currency #{currency_abbrev}"
     end
 
   end

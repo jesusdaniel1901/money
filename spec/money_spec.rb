@@ -2,6 +2,21 @@ require 'spec_helper'
 
 describe Money do
 
+  describe '#Constructors' do
+    let(:money_1) { Money.new(30,'EUR') }
+
+    it 'test the instance methods' do
+      expect(money_1.amount).to eq 30
+      expect(money_1.currency).to eq 'EUR'
+      expect(money_1.inspect).to eq '30 EUR'
+    end
+
+    it 'tries to create an invalid money' do
+       expect { Money.new('30','Bitcoin') }.to raise_error(TypeError,'We do not support the currency Bitcoin')
+    end
+
+  end
+
   describe '#Arithmetics with USD' do
     let(:money_1) { Money.new(3,'USD') }
     let(:money_2) { Money.new(2,'USD') }
@@ -73,17 +88,34 @@ describe Money do
   describe '#convert_to' do
 
     let(:money_1) { Money.new(3,'USD') }
+    let(:money_2) { Money.new(3,'EUR') }
 
     it 'convert USD to EUR' do
       money_1.convert_to('EUR')
       expect(money_1.currency).to eq 'EUR'
       expect(money_1.amount).to eq 2.76
+      expect(money_1).to eq Money.new(2.76,'EUR')
     end
 
-    it 'convert  to GBP' do
+    it 'convert USD to GBP' do
       money_1.convert_to('GBP')
       expect(money_1.currency).to eq 'GBP'
       expect(money_1.amount).to eq 2.4
+      expect(money_1).to eq Money.new(2.4,'GBP')
+    end
+
+    it 'convert EUR to GBP' do
+      money_2.convert_to('GBP')
+      expect(money_2.currency).to eq 'GBP'
+      expect(money_2.amount).to eq 2.58
+      expect(money_2).to eq Money.new(2.58,'GBP')
+    end
+
+    it 'convert EUR to USD' do
+      money_2.convert_to('USD')
+      expect(money_2.currency).to eq 'USD'
+      expect(money_2.amount).to eq 3.21
+      expect(money_2).to eq Money.new(3.21,'USD')
     end
 
   end
@@ -127,6 +159,31 @@ describe Money do
         "GBP": 0.8
       })
     end
+  end
+
+  describe '#errors' do
+
+    let(:money_1) { Money.new(3,'EUR') }
+    let(:money_2) { Money.new(2,'USD') }
+
+    it 'test the Arithmetics operands and raise a type error' do
+      expect { money_1 + 'jesus' }.to raise_error(TypeError,'The type must be a number or Money')
+      expect { money_1 - 'jesus' }.to raise_error(TypeError,'The type must be a number or Money')
+      expect { money_1 * 'jesus' }.to raise_error(TypeError,'The type must be a number or Money')
+      expect { money_1 / 'jesus' }.to raise_error(TypeError,'The type must be a number or Money')
+    end
+
+    it 'compares two moneys and raise a type error' do
+      expect { money_1 > 'jesus' }.to raise_error(TypeError,'The type must be a number or Money')
+      expect { money_1 < 'jesus' }.to raise_error(TypeError,'The type must be a number or Money')
+      expect { money_1 == 'jesus' }.to raise_error(TypeError,'The type must be a number or Money')
+    end
+
+    it 'divides by zero' do
+      expect { money_1 / Money.new(0,'EUR') }.to raise_error( ZeroDivisionError,'The division cannot be by 0')
+      expect { money_1 / 0 }.to raise_error( ZeroDivisionError,'The division cannot be by 0')
+    end
+
   end
 
 

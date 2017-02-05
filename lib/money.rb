@@ -12,77 +12,53 @@ class Money
   end
 
   def +(other_money)
-    if other_money.is_a?(Money)
-      second_operand = other_money.convert_to(currency).amount
-      new_result  = @amount + second_operand
-    elsif other_money.is_a?(Numeric)
-      new_result  = @amount + other_money
-    else
-      raise TypeError
-    end
-    return self.class.new(new_result,currency)
+    second_operand = validate_operand(other_money)
+    new_result = make_operation(:+,@amount,other_money.is_a?(Money)? second_operand:other_money)
+    self.class.new(new_result,currency)
   end
 
   def -(other_money)
-    if other_money.is_a?(Money)
-      second_operand = other_money.convert_to(currency).amount
-      new_result  = @amount - second_operand
-    elsif other_money.is_a?(Numeric)
-      new_result = @amount - other_money
-    else
-      raise TypeError
-    end
-    return self.class.new(new_result,currency)
+    second_operand = validate_operand(other_money)
+    new_result = make_operation(:-,@amount,other_money.is_a?(Money)? second_operand:other_money)
+    self.class.new(new_result,currency)
   end
 
   def *(other_money)
-    if other_money.is_a?(Money)
-      second_operand = other_money.convert_to(currency).amount
-      new_result  = (@amount* second_operand).round(2)
-    elsif other_money.is_a?(Numeric)
-      new_result = (@amount * other_money).round(2)
-    else
-      raise TypeError
-    end
-    return self.class.new(new_result,currency)
+    second_operand = validate_operand(other_money)
+    new_result = make_operation(:*,@amount,other_money.is_a?(Money)? second_operand:other_money)
+    self.class.new(new_result,currency)
   end
 
   def /(other_money)
-    if other_money.is_a?(Money)
-      second_operand = other_money.convert_to(currency).amount
-      new_result  =  (@amount/second_operand.to_f).round(2) if second_operand != 0
-    elsif other_money.is_a?(Numeric)
-      new_result  = (@amount/other_money).round(2) if other_money != 0
-    else
-      raise TypeError
-    end
-    return self.class.new(new_result,currency)
+    second_operand = validate_operand(other_money)
+    new_result = make_operation(:/,@amount,other_money.is_a?(Money)? second_operand:other_money)
+    !new_result.nil? ? self.class.new(new_result,currency) : division_error
   end
 
   def ==(other_money)
     if other_money.is_a?(Money)
       second_operand = other_money.convert_to(currency).amount
-      @amount == second_operand ? true : false
+      @amount == second_operand
     else
-      raise TypeError
+      return type_error
     end
   end
 
   def >(other_money)
-    if other_money.money?
+    if other_money.is_a?(Money)
       second_operand = other_money.convert_to(currency).amount
-      @amount > second_operand ? true: false
+      @amount > second_operand
     else
-      raise TypeError
+      return type_error
     end
   end
 
   def <(other_money)
-    if other_money.money?
+    if other_money.is_a?(Money)
       second_operand = other_money.convert_to(currency).amount
-      @amount < second_operand ? true: false
+      @amount < second_operand
     else
-      raise TypeError
+      return type_error
     end
   end
 
@@ -117,15 +93,38 @@ class Money
     end
   end
 
+  private
 
-
-  def money?
-    is_a?(Money)
+  def make_operation(operator,operand_1,operand_2)
+    case operator
+      when :+
+        new_result = operand_1 + operand_2
+        return new_result
+      when :-
+        new_result = operand_1 - operand_2
+        return new_result
+      when :*
+        new_result = (operand_1 * operand_2).round(2)
+        return new_result
+      when :/
+        new_result = operand_2 !=0 ? (operand_1 / operand_2.to_f).round(2) : nil
+        return new_result
+    end
   end
 
 
+  def type_error
+    raise TypeError,'The type must be a number or Money'
+  end
 
+  def division_error
+    raise   ZeroDivisionError, 'The division cannot be by 0'
+  end
 
+  def validate_operand(other_money)
+    second_operand = other_money.convert_to(currency).amount if other_money.is_a?(Money)
+    !other_money.is_a?(Numeric) && second_operand.nil? ? type_error : second_operand
+  end
 
 end
 
