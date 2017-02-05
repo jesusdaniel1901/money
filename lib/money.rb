@@ -7,7 +7,7 @@ class Money
   extend Enumerable
 
   def initialize(amount,currency_string)
-    @amount = amount
+    @amount = amount.to_f.round(2)
     @currency = Currency.new(currency_string)
   end
 
@@ -67,7 +67,7 @@ class Money
   end
 
   def inspect
-    "#{amount} #{currency}"
+    "#{amount.round(2)} #{currency}"
   end
 
   def convert_to(currency_string)
@@ -104,7 +104,7 @@ class Money
         new_result = operand_1 - operand_2
         return new_result
       when :*
-        new_result = (operand_1 * operand_2).round(2)
+        new_result = (operand_1 * operand_2.to_f).round(2)
         return new_result
       when :/
         new_result = operand_2 !=0 ? (operand_1 / operand_2.to_f).round(2) : nil

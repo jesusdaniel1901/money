@@ -1,8 +1,6 @@
 # Money
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/money`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem is to complete operation with money and currency conversion
 
 ## Installation
 
@@ -21,8 +19,48 @@ Or install it yourself as:
     $ gem install money
 
 ## Usage
+```
+require 'money'
 
-TODO: Write usage instructions here
+# Configure the currency rates with respect to a base currency
+Money.conversion_rates('EUR', {
+  'USD'     => 1.07,
+  'GBP' => 0.86
+})
+# Instantiate money objects
+thirty_eur = Money.new(30,'EUR')
+thirty_eur.amount #=> 30
+thirty_eur.currency #=> "EUR"
+thirty_eur.inspect #=> "30 EUR"
+```
+
+```
+# Convert to a different currency
+twenty_eur.convert_to('USD') # => 21.6 USD
+```
+
+```
+# Arithmetics
+twenty_usd = Money.new(20, 'USD')
+thirty_eur + twenty_usd # => 48.4 EUR
+thirty_eur - twenty_usd # => 11.6 EUR
+thirty_eur / twenty_usd # => 1.63 EUR
+thirty_eur * twenty_usd # => 552.0 EUR
+
+thirty_usd * 3 #=> 90.0 USD
+thirty_usd * / 3 #=> 10.0 USD
+```
+
+```
+# Comparisons
+thirty_eur == Money.new(30, 'EUR') # => true
+thirty_eur == Money.new(20, 'EUR') # => false 
+
+ 
+thirty_eur > Money.new(20,'USD')   # => true
+twenty_usd < Money.new(20,'GBP')   # => true
+
+```
 
 ## Development
 

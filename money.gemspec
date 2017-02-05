@@ -6,11 +6,11 @@ require 'money/version'
 Gem::Specification.new do |spec|
   spec.name          = "money"
   spec.version       = Money::VERSION
-  spec.authors       = ["Jesus"]
+  spec.authors       = ["Jesus Garcia"]
   spec.email         = ["jesusdaniel1901@gmail.com"]
 
-  spec.summary       = %q{test}
-  spec.description   = %q{test}
+  spec.summary       = %q{gem to work with money and currency}
+  spec.description   = %q{This gem is to complete operations with money and currency conversion}
   spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = "MIT"
 
