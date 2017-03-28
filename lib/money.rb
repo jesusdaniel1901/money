@@ -1,14 +1,14 @@
 require "money/version"
 require 'money/currency'
+require 'money/bank'
 require 'bigdecimal'
 
 class Money
   attr_accessor :amount,:currency
 
-  extend Enumerable
 
   def initialize(amount,currency_string)
-    @amount = BigDecimal.new(amount.to_s).truncate(2)
+    @amount = BigDecimal.new(amount.to_s)
     @currency = Currency.new(currency_string)
   end
 
@@ -68,34 +68,34 @@ class Money
   end
 
   def inspect
-    "#{@amount.truncate(2).to_s('F')} #{currency}"
+    "#{@amount.to_s('F')} #{currency}"
   end
 
   def convert_to(currency_string)
     if @currency.abbrev.to_s == currency_string.to_s
       return self
     else
-      file_exchange = File.read('config/currencies_exchange.json')
-      exchange_json = JSON.parse(file_exchange)
-      currency_rate =  exchange_json[@currency.abbrev.to_s][currency_string.to_s]
-      @amount = @amount * BigDecimal.new(currency_rate.to_s).truncate(2)
+      currency_rate = Bank.instance.get_currency_rate(@currency.abbrev.to_s,currency_string.to_s)
+      @amount = (@amount * BigDecimal.new(currency_rate.to_s)).round(2)
       @currency = Currency.new(currency_string)
       return self
     end
   end
 
   def self.conversion_rates(base_currency,options={})
-    currency_exchange_file = File.read('config/currencies_exchange.json')
-    currency_exchange_json = JSON.parse currency_exchange_file
-    currency_exchange_json[base_currency]= options
-
-    File.open("config/currencies_exchange.json","w+") do |f|
-      f.write(JSON.pretty_generate(currency_exchange_json))
+    exchange_json_obj = Bank.instance.exchange_json
+    exchange_json_obj[base_currency] = options
+    begin
+      File.open("config/currencies_exchange.json","w+") do |f|
+        f.write(JSON.pretty_generate(exchange_json_obj))
+      end
+    rescue Exception => msg
+      puts msg
     end
   end
 
   def amount
-    BigDecimal(@amount.to_s('F')).truncate(2)
+    BigDecimal(@amount.to_s('F'))
   end
 
   def amount_decimal
@@ -107,16 +107,16 @@ class Money
   def make_operation(operator,operand_1,operand_2)
     case operator
       when :+
-        new_result = operand_1 + BigDecimal.new(operand_2.to_s).truncate(2)
+        new_result = operand_1 + BigDecimal.new(operand_2.to_s)
         return new_result
       when :-
-        new_result = operand_1 - BigDecimal.new(operand_2.to_s).truncate(2)
+        new_result = operand_1 - BigDecimal.new(operand_2.to_s)
         return new_result
       when :*
-        new_result = (operand_1 * BigDecimal.new(operand_2.to_s).truncate(2))
+        new_result = (operand_1 * BigDecimal.new(operand_2.to_s)).round(2)
         return new_result
       when :/
-        new_result = operand_2 !=0 ? (operand_1 / BigDecimal.new(operand_2.to_s).truncate(2)) : nil
+        new_result = operand_2 !=0 ? (operand_1 / BigDecimal.new(operand_2.to_s)).round(2) : nil
         return new_result
     end
   end
@@ -126,7 +126,7 @@ class Money
   end
 
   def division_error
-    raise   ZeroDivisionError, 'The division cannot be by 0'
+    raise ZeroDivisionError,'The division cannot be by 0'
   end
 
   def validate_operand(other_money)

@@ -1,9 +1,10 @@
 require 'json'
+
 class Currency
   attr_accessor :name,:symbol,:abbrev
 
   def initialize(currency_abbrev)
-    currency = look_in_json_file(currency_abbrev.to_s.upcase)
+    currency = Bank.instance.get_currency(currency_abbrev.to_s.upcase)
     unless currency.nil?
       @name = currency["name"]
       @symbol = currency["symbol"]
@@ -14,10 +15,5 @@ class Currency
 
   end
 
-  def look_in_json_file(currency_abbrev)
-    money_file = File.read('config/moneys.json')
-    currency_json = JSON.parse(money_file)
-    return currency_json[currency_abbrev]
-  end
 
 end
