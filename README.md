@@ -1,6 +1,8 @@
 # Money
 
-This gem is to complete operation with money and currency conversion
+This gem is to complete operation with money and currency conversion. The main purpose of this gem is to show my skills on ruby, 
+either way if you want to use it or if you want to contribute feel free to do it
+
 
 ## Installation
 
@@ -43,10 +45,10 @@ twenty_eur.convert_to('USD') # => 21.6 USD
 # Arithmetics
 twenty_usd = Money.new(20, 'USD')
 thirty_eur = Money.new(30, 'EUR')
-thirty_eur + twenty_usd # => 48.6 EUR
-thirty_eur - twenty_usd # => 11.4 EUR
-thirty_eur / twenty_usd # => 1.61 EUR
-thirty_eur * twenty_usd # => 558.0 EUR
+thirty_eur + twenty_usd # => 48.41 EUR
+thirty_eur - twenty_usd # => 11.59 EUR
+thirty_eur / twenty_usd # => 1.63 EUR
+thirty_eur * twenty_usd # => 552.3 EUR
 
 thirty_usd * 3 #=> 90.0 USD
 thirty_usd / 3 #=> 10.0 USD
